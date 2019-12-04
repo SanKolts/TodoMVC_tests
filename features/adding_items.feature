@@ -4,8 +4,8 @@ Feature: adding new to_do lines to list
 
 
   Scenario: adding new todo in list
-     Given the site is opened
-      When I add "Текст" in input
+    Given the site is opened
+    When I add "Текст" in input
     And press enter for text input
     Then the 1 item in the list should be "Текст"
     And counter at the bottom should show 1

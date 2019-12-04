@@ -24,20 +24,22 @@ def step_impl(context):
 @then('the {number} item in the list should be "{text}"')
 def step_impl(context, number, text):
     item_index = int(number) - 1
-    assert page.ToDoList(context.browser).get_element_text_by_index(item_index) == text, print(
-        "smth goes wrong, presented only this text: " + page.ToDoList(context.browser).
-        get_element_text_by_index(item_index))
+    assert page.ToDoList(context.browser).get_element_text_by_index(item_index) == text, (
+            "smth goes wrong, presented only this text: " + page.ToDoList(context.browser).
+            get_element_text_by_index(item_index))
 
 
 @then('counter at the bottom should show {integer}')  # to do fix this "right" to flexible parameter
 def step_impl(context, integer):
     items_number = int(integer)
-    assert items_number == page.BottomCounter(context.browser).get_list_counter()
+    bottom_real_counter = page.BottomCounter(context.browser).get_list_counter()
+    assert items_number == bottom_real_counter, (
+                "counter at the bottom: " + bottom_real_counter + "but should be: " + items_number)
 
 
 @given('I have three items in list')
 def step_impl(context):
-    item_list = ["Ответить на вопрос жизни, вселенной и всего такого", # to do fix this hardcode
+    item_list = ["Ответить на вопрос жизни, вселенной и всего такого",  # to do fix this hardcode
                  "Придумать остроумные пункты",
                  "Погладить кошку"]
     create_item = page.InputField(context.browser)
@@ -79,8 +81,8 @@ def step_impl(context, text):
 @then('I should see {number} items in todolist')
 def step_impl(context, number):
     todo_list = page.ToDoList(context.browser)
-    assert int(number) == todo_list.get_number_of_items(), \
-        print("expected: " + str(number) + "but received: " + str(todo_list.get_number_of_items()))
+    assert int(number) == todo_list.get_number_of_items(), (
+            "expected: " + str(number) + "but received: " + str(todo_list.get_number_of_items()))
 
 
 @then("not one task is not completed")
