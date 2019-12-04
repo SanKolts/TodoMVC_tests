@@ -71,15 +71,15 @@ def step_impl(context, text):
 @when('I click "{text}" filter button')
 def step_impl(context, text):
     """
-    'text' can be only All, Active or Completed
+    'text' can be only "All", "Active" or "Completed"
     """
-    page.LowFilterButton(context.browser, text)
+    page.LowFilterButton(context.browser, text).click_filter_menu_item()
 
 
 @then('I should see {number} items in todolist')
 def step_impl(context, number):
     todo_list = page.ToDoList(context.browser)
-    assert number == todo_list.get_number_of_items(), \
+    assert int(number) == todo_list.get_number_of_items(), \
         print("expected: " + str(number) + "but received: " + str(todo_list.get_number_of_items()))
 
 
@@ -87,7 +87,7 @@ def step_impl(context, number):
 def step_impl(context):
     number_of_active_items = 0
     todo_list = page.ToDoList(context.browser)
-    for index in todo_list.get_number_of_items():
+    for index in range(todo_list.get_number_of_items()):
         if not todo_list.is_item_by_index_completed(index):
             number_of_active_items += 1
         else:

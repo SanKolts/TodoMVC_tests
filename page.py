@@ -94,4 +94,5 @@ class LowFilterButton(PageElement):
         self.filter_locator = any_filter_button_css.format(self.filter_css_name)
 
     def click_filter_menu_item(self):
+        print(self.filter_locator)
         self.driver.find_element_by_css_selector(self.filter_locator).click()

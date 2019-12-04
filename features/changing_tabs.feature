@@ -1,7 +1,6 @@
 Feature: Changing tabs in todo list
   Sometimes I want to filter my todo list
 
-  @wip
   Scenario: Filter only active tasks
     Given the site is opened
     And I have three items in list
