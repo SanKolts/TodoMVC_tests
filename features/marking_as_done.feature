@@ -4,7 +4,7 @@ Feature: mark items as done
 
   Scenario: mark item as done
     Given the site is opened
-    And i have three items in list
-    When i click completed button on second item
+    And I have three items in list
+    When I click completed button on second item
     Then this task should become completed
-    And counter at the bottom should shows 2
+    And counter at the bottom should show 2

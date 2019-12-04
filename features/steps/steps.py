@@ -6,15 +6,14 @@ from time import sleep
 
 @given('the site is opened')
 def step_impl(context):
-    # context.browser = webdriver.Chrome()
     context.browser.get(context.url)
     pass
 
 
-@when('i add "{text}" in input')
+@when('I add "{text}" in input')
 def step_impl(context, text):
     input_field = page.InputField(context.browser)
-    input_field.add_text(text)  # todo implement text as flexible parameter from table
+    input_field.add_text(text)  # todo implement text as flexible parameter from the table
 
 
 @step('press enter for text input')
@@ -22,21 +21,21 @@ def step_impl(context):
     page.InputField(context.browser).press_enter()
 
 
-@then('the {integer} item in list should be "{text}"')
-def step_impl(context, integer, text):
-    item_index = int(integer) - 1
+@then('the {number} item in the list should be "{text}"')
+def step_impl(context, number, text):
+    item_index = int(number) - 1
     assert page.ToDoList(context.browser).get_element_text_by_index(item_index) == text, print(
         "smth goes wrong, presented only this text: " + page.ToDoList(context.browser).
         get_element_text_by_index(item_index))
 
 
-@then('counter at the bottom should shows {integer}')  # to do fix this "right" to flexible parameter
+@then('counter at the bottom should show {integer}')  # to do fix this "right" to flexible parameter
 def step_impl(context, integer):
     items_number = int(integer)
     assert items_number == page.BottomCounter(context.browser).get_list_counter()
 
 
-@given('i have three items in list')
+@given('I have three items in list')
 def step_impl(context):
     item_list = ["Ответить на вопрос жизни, вселенной и всего такого", # to do fix this hardcode
                  "Придумать остроумные пункты",
@@ -46,7 +45,7 @@ def step_impl(context):
         create_item.create_new_item(item)
 
 
-@when('i click completed button on second item')
+@when('I click completed button on second item')
 def step_impl(context):
     second_item_index = 1
     page.CompletedButton(context.browser).toggle_button_by_index(second_item_index)
@@ -58,14 +57,38 @@ def step_impl(context):
     assert page.ToDoList(context.browser).is_item_by_index_completed(this_task_index)
 
 
-@then('i sleep')  # for debugging purposes only
+@then('I sleep')  # for debugging purposes only
 def step_impl(context):
     sleep(10)
 
 
-@when('i\'m changing the text of the third input to "{text}"')
+@when('I change the text of the third input to "{text}"') # todo fix this hardcode "third"
 def step_impl(context, text):
     third_item_index = 2
     page.ToDoList(context.browser).change_item_by_index(third_item_index, text)
 
 
+@when('I click "{text}" filter button')
+def step_impl(context, text):
+    """
+    'text' can be only All, Active or Completed
+    """
+    page.LowFilterButton(context.browser, text)
+
+
+@then('I should see {number} items in todolist')
+def step_impl(context, number):
+    todo_list = page.ToDoList(context.browser)
+    assert number == todo_list.get_number_of_items(), \
+        print("expected: " + str(number) + "but received: " + str(todo_list.get_number_of_items()))
+
+
+@then("not one task is not completed")
+def step_impl(context):
+    number_of_active_items = 0
+    todo_list = page.ToDoList(context.browser)
+    for index in todo_list.get_number_of_items():
+        if not todo_list.is_item_by_index_completed(index):
+            number_of_active_items += 1
+        else:
+            raise Exception("completed task in list")

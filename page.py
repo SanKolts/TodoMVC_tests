@@ -9,6 +9,7 @@ list_element_css = "ul.todo-list>li"
 todo_counter_css = "span.todo-count > strong"
 complete_button_css = "input.toggle"
 completed_element_class = "completed"
+any_filter_button_css = ".todoapp ul.filters a[href*='{}']"
 
 
 class PageElement(object):
@@ -43,6 +44,9 @@ class ToDoList(PageElement):
         else:
             raise NoSuchElementException
 
+    def get_number_of_items(self):
+        return len(self._return_list_elements())
+
     def get_element_by_index(self, index):
         return self._return_list_elements()[index]
 
@@ -70,7 +74,7 @@ class BottomCounter(PageElement):
 class CompletedButton(PageElement):
 
     # def __init__(self, driver, index):
-    #     super(CompletedButton, self).__init__(driver) #  todo better inheritance from list item class
+    #     super(CompletedButton, self).__init__(driver) #  todo better inheritance from the list item class
     # self.button =
 
     def _get_button_by_index(self, index):
@@ -80,3 +84,14 @@ class CompletedButton(PageElement):
     def toggle_button_by_index(self, index):
         self._get_button_by_index(index).click()
 
+
+class LowFilterButton(PageElement):
+    possible_filters = {"All": "", "Active": "active", "Completed": "completed"}
+
+    def __init__(self, driver, filter_name):
+        super().__init__(driver)
+        self.filter_css_name = self.possible_filters[filter_name]
+        self.filter_locator = any_filter_button_css.format(self.filter_css_name)
+
+    def click_filter_menu_item(self):
+        self.driver.find_element_by_css_selector(self.filter_locator).click()
