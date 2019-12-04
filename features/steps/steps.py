@@ -62,7 +62,7 @@ def step_impl(context):
     sleep(10)
 
 
-@when('I change the text of the third input to "{text}"') # todo fix this hardcode "third"
+@when('I change the text of the third input to "{text}"')  # todo fix this hardcode "third"
 def step_impl(context, text):
     third_item_index = 2
     page.ToDoList(context.browser).change_item_by_index(third_item_index, text)
